@@ -121,7 +121,7 @@ interface CheckPermissionProps {
   }; 
 
   // Function to handle checkbox click and show the relevant message
-  const handleCheckboxClick = (permissionType) => {
+  const handleCheckboxClick = (permissionType: "camera" | "microphone" | "speaker" | "screenShare") => {
     if (permissionType === "camera" && !cameraAllowed) {
       setModalMessage("Camera permission is required to continue.");
       setShowModal(true);

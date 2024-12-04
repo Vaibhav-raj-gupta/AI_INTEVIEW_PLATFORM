@@ -12,7 +12,7 @@ const QuestionScreen = ({onFinish}) => {
   const [timeLeft, setTimeLeft] = useState(60);
   const cameraAllowed = true;
   const [isLoading, setIsLoading] = useState(false); // Loading state
-  const videoRef = useRef(null);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
 
   const totalQuestions = HourlyQuestions.length;
 
@@ -55,7 +55,7 @@ const QuestionScreen = ({onFinish}) => {
     }
   }, [cameraAllowed, isLoading]);
 
-  const speakQuestion = (text) => {
+  const speakQuestion = (text: string | undefined) => {
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.rate = 1; // Adjust the speech rate if needed (default is 1)
     utterance.pitch = 1; // Adjust pitch (default is 1)
