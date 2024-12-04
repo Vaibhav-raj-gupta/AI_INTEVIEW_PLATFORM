@@ -2,7 +2,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import { FaHome, FaClock, FaCamera, FaDesktop, FaVolumeUp, FaMicrophone, FaExclamationTriangle } from "react-icons/fa";
 
-const CheckPermission = (onNext: React.MouseEventHandler<HTMLButtonElement> | undefined) => {
+interface CheckPermissionProps {
+    onNext: () => void;
+  }
+
+  const CheckPermission: React.FC<CheckPermissionProps> = ({ onNext }) => {
   const [cameraAllowed, setCameraAllowed] = useState(false);
   const [microphoneAllowed, setMicrophoneAllowed] = useState(false);
   const [screenShareAllowed, setScreenShareAllowed] = useState(false);
