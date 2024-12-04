@@ -21,7 +21,7 @@ const QuestionScreen:React.FC<QuestionProps> = ({ onFinish }) => {
   const totalQuestions = HourlyQuestions.length;
 
   useEffect(() => {
-    localStorage.setItem("currentQuestionIndex", currentQuestionIndex);
+    localStorage.setItem("currentQuestionIndex", currentQuestionIndex.toString());
 
     // Speak the current question
     const currentQuestion = HourlyQuestions[currentQuestionIndex]?.question;
