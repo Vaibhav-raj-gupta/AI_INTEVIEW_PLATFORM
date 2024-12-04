@@ -3,10 +3,12 @@
 // File: Instruction.js
 import React, { useEffect, useRef, useState } from "react";
 import { FaHome, FaClock } from "react-icons/fa";
-
-const Instruction = ({ onNext }) => {
+interface CheckInstructionProps {
+    onNext: () => void;
+  }
+const Instruction : React.FC<CheckInstructionProps> = ({ onNext }) => {
   const [cameraAllowed, setCameraAllowed] = useState(false);
-  const videoRef = useRef(null);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
 
   // Function to request camera access
   const requestCameraAccess = async () => {
@@ -16,7 +18,7 @@ const Instruction = ({ onNext }) => {
         setCameraAllowed(true);
       }
     } catch (err) {
-      console.error("Camera permission denied", err);
+      console.log("Camera permission denied", err);
     }
   };
 
@@ -157,7 +159,7 @@ const styles = {
   videoView: {
     width: "100%",
     height: "100%",
-    objectFit: "cover", // Ensures the video fully covers the container area
+    ObjectFit: "cover", // Ensures the video fully covers the container area
     objectPosition: "center", // Keeps the video centered
   },
   cameraButton: {

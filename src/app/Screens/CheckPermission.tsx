@@ -328,7 +328,7 @@ const styles = {
   videoView: {
     width: "100%",
     height: "100%",
-    objectFit: "cover", // Ensures the video fully covers the container area
+    ObjectFit : "cover", // Ensures the video fully covers the container area
     objectPosition: "center", // Keeps the video centered
   },
   phaseTwo: {
