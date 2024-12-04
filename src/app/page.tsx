@@ -62,8 +62,9 @@ const Home = () => {
 
 export default Home;
 
-const styles = {
+const styles: { [key: string]: React.CSSProperties } = {
   modal: {
+    position: "fixed",
     top: "0",
     left: "0",
     width: "100%",
@@ -79,7 +80,7 @@ const styles = {
     borderRadius: "5px",
     width: "450px",
     height:"400px",
-    TextAlign: "center",
+    textAlign: "center",
   },
   warningIconContainer: {
     display: "flex",  // Make the container a flexbox

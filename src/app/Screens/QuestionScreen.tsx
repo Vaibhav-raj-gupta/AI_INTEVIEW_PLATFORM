@@ -3,7 +3,11 @@ import React, { useState, useEffect, useRef } from "react";
 import { HourlyQuestions } from "../Components/QueastionSheet";
 import { FaExclamationCircle } from "react-icons/fa";
 
-const QuestionScreen = ({onFinish}) => {
+interface QuestionProps {
+    onFinish: () => void;
+  }
+
+const QuestionScreen:React.FC<QuestionProps> = ({ onFinish }) => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(() => {
     const savedIndex = localStorage.getItem("currentQuestionIndex");
     return savedIndex ? parseInt(savedIndex, 10) : 0;
@@ -133,7 +137,7 @@ const QuestionScreen = ({onFinish}) => {
 export default QuestionScreen;
 
 // Inline styles
-const styles = {
+const styles: { [key: string]: React.CSSProperties } = {
   container: {
     display: "flex",
     flexDirection: "column",

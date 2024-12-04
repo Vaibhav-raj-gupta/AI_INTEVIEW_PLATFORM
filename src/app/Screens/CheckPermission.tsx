@@ -268,7 +268,7 @@ interface CheckPermissionProps {
 };
 
 // CSS in JS
-const styles = {
+const styles: { [key: string]: React.CSSProperties } = {
   container: {
     fontFamily: "Arial, sans-serif",
     padding: 0,
@@ -307,13 +307,13 @@ const styles = {
   },
   phaseOne: {
     flex: 1,
-    TextAlign: "center",
+    textAlign: "center",
   },
   heading: {
     fontSize: "24px",
     color: "white",
     marginBottom: "20px",
-    TextAlign: "left",
+    textAlign: "left",
   },
   videoContainer: {
     width: "100%",
@@ -328,11 +328,11 @@ const styles = {
   videoView: {
     width: "100%",
     height: "100%",
-    ObjectFit : "cover", // Ensures the video fully covers the container area
+    objectFit : "cover", // Ensures the video fully covers the container area
     objectPosition: "center", // Keeps the video centered
   },
   phaseTwo: {
-    TextAlign: "center",
+    textAlign: "center",
     flex: 1,
   },
   phaseTwoHeader: {
@@ -359,13 +359,13 @@ const styles = {
   },
   subHeading: {
     fontSize: "22px",
-    TextAlign: "left",
+    textAlign: "left",
     margin: "0 80px 0px",
   },
   discriptionText: {
     fontSize: "16px",
     marginBottom: "10px",
-    TextAlign: "left",
+    textAlign: "left",
     margin: "0 80px 20px",
     color: "gray",
   },

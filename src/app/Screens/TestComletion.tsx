@@ -9,7 +9,7 @@ const TestCompletion = () => {
   export default TestCompletion;
   
   // Inline styles for centering and styling
-  const styles = {
+  const styles: { [key: string]: React.CSSProperties } = {
     container: {
       display: "flex",
       justifyContent: "center",

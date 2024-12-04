@@ -99,7 +99,7 @@ const Instruction : React.FC<CheckInstructionProps> = ({ onNext }) => {
 };
 
 // CSS in JS
-const styles = {
+const styles: { [key: string]: React.CSSProperties } = {
   container: {
     fontFamily: "Arial, sans-serif",
     padding: 0,
@@ -138,13 +138,13 @@ const styles = {
   },
   phaseOne: {
     flex: 1,
-    TextAlign:'center'
+    textAlign:'center'
   },
   heading: {
     fontSize: "24px",
     color: "white",
     marginBottom: "20px",
-    TextAlign : "left",
+    textAlign : "left",
   },
   videoContainer: {
     width: "100%",
@@ -159,7 +159,7 @@ const styles = {
   videoView: {
     width: "100%",
     height: "100%",
-    ObjectFit: "cover", // Ensures the video fully covers the container area
+    objectFit: "cover", // Ensures the video fully covers the container area
     objectPosition: "center", // Keeps the video centered
   },
   cameraButton: {
@@ -171,7 +171,7 @@ const styles = {
     cursor: "pointer",
   },
   phaseTwo: {
-    TextAlign : "center",
+    textAlign : "center",
     flex: 1,
   },
   phaseTwoHeader: {
@@ -199,12 +199,12 @@ const styles = {
   subHeading: {
     fontSize: "22px",
     marginBottom: "10px",
-    TextAlign : "left",
+    textAlign : "left",
     margin: "0 80px 20px",
   },
   instructionsList: {
     listStyleType: "decimal",
-    TextAlign : "left",
+    textAlign : "left",
     margin: "0 100px 30px",  // Matching the subHeading margin
     maxWidth: "500px",
   },
@@ -219,7 +219,7 @@ const styles = {
     margin: "20px auto",
     borderRadius: "5px",
     lineHeight: "1.5",
-    TextAlign : "left",
+    textAlign : "left",
   },
   startButton: {
     padding: '10px 20px',
