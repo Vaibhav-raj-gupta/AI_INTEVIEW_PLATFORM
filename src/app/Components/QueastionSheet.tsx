@@ -101,9 +101,5 @@ export const HourlyQuestions = [
       hour: 25,
       question: "What motivates you to take initiative at work?",
     },
-    {
-      hour: 26,
-      question: "Where do you see yourself contributing the most value to our organization?",
-    },
   ];
   

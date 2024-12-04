@@ -3,6 +3,7 @@
 // File: Instruction.js
 import React, { useEffect, useRef, useState } from "react";
 import { FaHome, FaClock } from "react-icons/fa";
+import { HourlyQuestions } from "../Components/QueastionSheet";
 interface CheckInstructionProps {
     onNext: () => void;
   }
@@ -49,6 +50,8 @@ const Instruction : React.FC<CheckInstructionProps> = ({ onNext }) => {
      "Answer the question with examples and projects you've worked on."
   ];
 
+  const totalQuestions = HourlyQuestions.length;
+
   return (
     <div style={styles.container}>
       {/* Top Bar */}
@@ -77,7 +80,7 @@ const Instruction : React.FC<CheckInstructionProps> = ({ onNext }) => {
               <FaHome style={styles.icon} /> Zeko
             </div>
             <div style={styles.timerContainer}>
-              <FaClock style={styles.icon} /> 26 Minutes
+              <FaClock style={styles.icon} /> {totalQuestions} Minutes
             </div>
           </div>
           <h3 style={styles.subHeading}>Instructions</h3>

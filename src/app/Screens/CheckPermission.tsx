@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
 import { FaHome, FaClock, FaCamera, FaDesktop, FaVolumeUp, FaMicrophone, FaExclamationTriangle } from "react-icons/fa";
+import { HourlyQuestions } from "../Components/QueastionSheet";
 
 interface CheckPermissionProps {
     onNext: () => void;
@@ -138,6 +139,7 @@ interface CheckPermissionProps {
   };
 
   const isAllPermissionsGranted = cameraAllowed && microphoneAllowed && speakerAllowed && screenShareAllowed;
+  const totalQuestions = HourlyQuestions.length;
 
   return (
     <div style={styles.container}>
@@ -166,7 +168,7 @@ interface CheckPermissionProps {
               <FaHome style={styles.icon} /> Zeko
             </div>
             <div style={styles.timerContainer}>
-              <FaClock style={styles.icon} /> 26 Minutes
+              <FaClock style={styles.icon} /> {totalQuestions} Minutes
             </div>
           </div>
           <h3 style={styles.subHeading}>Ready To Join?</h3>
