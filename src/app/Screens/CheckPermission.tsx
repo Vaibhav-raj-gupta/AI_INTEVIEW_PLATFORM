@@ -15,7 +15,7 @@ interface CheckPermissionProps {
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
   const [permissionToRequest, setPermissionToRequest] = useState("camera");
-  const videoRef = useRef(null);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
 
   // Function to request camera access
   const requestCameraPermission = async () => {
