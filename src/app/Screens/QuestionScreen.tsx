@@ -1,6 +1,5 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
-import { useRouter } from "next/navigation"; // For navigation
 import { HourlyQuestions } from "../Components/QueastionSheet";
 import { FaExclamationCircle } from "react-icons/fa";
 
@@ -11,10 +10,9 @@ const QuestionScreen = ({onFinish}) => {
   });
 
   const [timeLeft, setTimeLeft] = useState(60);
-  const [cameraAllowed, setCameraAllowed] = useState(true);
+  const cameraAllowed = true;
   const [isLoading, setIsLoading] = useState(false); // Loading state
   const videoRef = useRef(null);
-  const router = useRouter(); // Next.js router for navigation
 
   const totalQuestions = HourlyQuestions.length;
 
@@ -84,7 +82,7 @@ const QuestionScreen = ({onFinish}) => {
     return (
       <div style={styles.loadingContainer}>
         <h2 style={styles.loadingText}>
-          That's Great! Just give me a moment to take notes ✍️
+          Thats Great! Just give me a moment to take notes ✍️
         </h2>
       </div>
     );
@@ -126,7 +124,7 @@ const QuestionScreen = ({onFinish}) => {
 
       <div style={styles.instructionBox}>
         <FaExclamationCircle style={styles.icon} />
-        <p>Press 'Enter' for Saving and Next</p>
+        <p>Press Enter for Saving and Next</p>
       </div>
     </div>
   );
