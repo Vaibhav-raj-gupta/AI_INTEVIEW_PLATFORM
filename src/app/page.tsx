@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Instruction from "./Screens/Instruction";
 import CheckPermission from "./Screens/CheckPermission";
 import QuestionScreen from "./Screens/QuestionScreen";
@@ -10,13 +10,30 @@ const Home = () => {
   const [currentScreen, setCurrentScreen] = useState(1); // 1: Instruction, 2: CheckPermission, 3: QuestionScreen, 4: TestCompletion
   const [modalMessage, setModalMessage] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(true); // State to track if the device is desktop
+
+  // Effect to check the screen width and adjust the app's behavior
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsDesktop(window.innerWidth > 768); // Set desktop if width is greater than 768px
+    };
+
+    checkScreenSize(); // Initial check
+    window.addEventListener("resize", checkScreenSize); // Listen for resize events
+
+    return () => {
+      window.removeEventListener("resize", checkScreenSize); // Clean up the event listener
+    };
+  }, []);
 
   const handleStartTest = () => {
     const testCompleted = localStorage.getItem("testCompleted");
 
     if (testCompleted === "true") {
-      setModalMessage("You have already completed this test. Retaking is not allowed at this time. If you believe this is a mistake, please contact the administrator for assistance.");
-      setShowModal(true);
+      if (isDesktop) {
+        setModalMessage("You have already completed this test. Retaking is not allowed at this time. If you believe this is a mistake, please contact the administrator for assistance.");
+        setShowModal(true);
+      }
     } else {
       setCurrentScreen(3); // Navigate to QuestionScreen
     }
@@ -31,23 +48,25 @@ const Home = () => {
     setShowModal(false);
   };
 
+  // Render nothing or a message on mobile devices
+  if (!isDesktop) {
+    return (
+      <div style={styles.mobileMessageContainer}>
+        <h2 style={styles.mobileMessage}>This app is only available on desktop devices.Switch to Desktop mode</h2>
+      </div>
+    );
+  }
+
   return (
     <div>
-            {showModal && (
+      {showModal && (
         <div style={styles.modal}>
           <div style={styles.modalContent}>
-            {/* Warning Icon */}
             <div style={styles.warningIconContainer}>
               <FaExclamationTriangle style={styles.warningIcon} />
             </div>
-
-            {/* Header Message */}
             <h2 style={styles.modalHeader}>Test Already Attempted</h2>
-
-            {/* Modal Message */}
             <p style={styles.modalMessage}>{modalMessage}</p>
-
-            {/* Close Button */}
             <button style={styles.modalCloseButton} onClick={handleModalClose}>Understood</button>
           </div>
         </div>
@@ -79,18 +98,18 @@ const styles: { [key: string]: React.CSSProperties } = {
     padding: "20px",
     borderRadius: "5px",
     width: "450px",
-    height:"400px",
+    height: "400px",
     textAlign: "center",
   },
   warningIconContainer: {
-    display: "flex",  // Make the container a flexbox
-    justifyContent: "center",  // Center horizontally
-    alignItems: "center",  // Center vertically
-    marginBottom: "20px", // Space between icon and header
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: "20px",
   },
   warningIcon: {
     fontSize: "80px",
-    color: "orange", // Orange color for the warning icon
+    color: "orange",
   },
   modalHeader: {
     fontSize: "30px",
@@ -110,5 +129,15 @@ const styles: { [key: string]: React.CSSProperties } = {
     borderRadius: "5px",
     cursor: "pointer",
     width: "100%",
+  },
+  mobileMessageContainer: {
+    textAlign: "center",
+    padding: "20px",
+    backgroundColor: "#0D1119",
+    color: "#CDD1DB",
+  },
+  mobileMessage: {
+    fontSize: "24px",
+    color: "white",
   },
 };
