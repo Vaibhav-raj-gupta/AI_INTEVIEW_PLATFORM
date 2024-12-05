@@ -11,7 +11,7 @@ const Home = () => {
   const [message, setmessage] = useState("");
   const [modal, setmodal] = useState(false);
   const [isdesktop, setisdesktop] = useState(true);
-  // Effect to check the screen width and adjust the app's behavior
+ 
   useEffect(() => {
     const checkScreenSize = () => {setisdesktop(window.innerWidth > 768);};
     checkScreenSize(); 
@@ -26,18 +26,17 @@ const Home = () => {
         setmodal(true);
       }
     } else {
-      setScreen(3); // Navigate to QuestionScreen
+      setScreen(3);
     }
   };
 
   const handleFinishTest = () => {
-    setScreen(4); // Navigate to TestCompletion screen
-    localStorage.setItem("testCompleted", "true"); // Mark test as completed
+    setScreen(4);
+    localStorage.setItem("testCompleted", "true");
   };
 
   const handleModalClose = () => { setmodal(false);};
 
-  // Render nothing or a message on mobile devices
   if (isdesktop === false) {
     return (
       <div style={styles.mobileMessageContainer}>
