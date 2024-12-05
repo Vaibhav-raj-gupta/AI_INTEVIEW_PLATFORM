@@ -8,22 +8,20 @@ const TestCompletion = () => {
   
   export default TestCompletion;
   
-  // Inline styles for centering and styling
   const styles: { [key: string]: React.CSSProperties } = {
     container: {
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
       height: "100vh",
-      backgroundColor: "#161D29", // Background color for a professional look
-      color: "#FFFFFF", // Text color
-      fontFamily: "Arial, sans-serif",
+      backgroundColor: "#161D29",
+      color: "#FFFFFF",
     },
     text: {
-      fontSize: "26px", // Larger text size
+      fontSize: 26,
       fontWeight: "bold",
       textAlign: "center",
-      color: "white", // Bright color for emphasis
+      color: "white",
     },
   };
   

@@ -4,10 +4,10 @@ import { HourlyQuestions } from "../Components/QueastionSheet";
 import { FaExclamationCircle } from "react-icons/fa";
 
 interface QuestionProps {
-    onFinish: () => void;
-  }
+  onFinish: () => void;
+}
 
-const QuestionScreen:React.FC<QuestionProps> = ({ onFinish }) => {
+const QuestionScreen: React.FC<QuestionProps> = ({ onFinish }) => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(() => {
     const savedIndex = localStorage.getItem("currentQuestionIndex");
     return savedIndex ? parseInt(savedIndex, 10) : 0;
@@ -21,25 +21,27 @@ const QuestionScreen:React.FC<QuestionProps> = ({ onFinish }) => {
   const totalQuestions = HourlyQuestions.length;
 
   useEffect(() => {
-    localStorage.setItem("currentQuestionIndex", currentQuestionIndex.toString());
+    localStorage.setItem(
+      "currentQuestionIndex",
+      currentQuestionIndex.toString()
+    );
 
     // Speak the current question
     const currentQuestion = HourlyQuestions[currentQuestionIndex]?.question;
-    if (currentQuestion) {
+    if (currentQuestion && !isLoading) {
       speakQuestion(currentQuestion);
     }
-  }, []);
+  }, [isLoading]);
 
   useEffect(() => {
     if (timeLeft > 0) {
       const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
       return () => clearTimeout(timer);
     } else {
-      // If it's the last question, navigate to the completion screen
       if (currentQuestionIndex === totalQuestions - 1) {
-        onFinish();// Navigate to the Test Completion screen
+        onFinish();
       } else {
-        handleNext(); // Go to next question if not the last question
+        handleNext();
       }
     }
   }, [timeLeft, currentQuestionIndex, totalQuestions]);
@@ -54,20 +56,19 @@ const QuestionScreen:React.FC<QuestionProps> = ({ onFinish }) => {
           }
         })
         .catch((err) => {
-          console.error("Camera access denied: ", err);
+          console.log("Camera access denied: ", err);
         });
     }
   }, [cameraAllowed, isLoading]);
 
   const speakQuestion = (text: string | undefined) => {
     const utterance = new SpeechSynthesisUtterance(text);
-    utterance.rate = 1; // Adjust the speech rate if needed (default is 1)
-    utterance.pitch = 1; // Adjust pitch (default is 1)
+    utterance.rate = 1;
+    utterance.pitch = 1;
     speechSynthesis.speak(utterance);
   };
 
   const handleNext = () => {
-    // Show loading screen for 5 seconds before moving to the next question
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
@@ -75,17 +76,15 @@ const QuestionScreen:React.FC<QuestionProps> = ({ onFinish }) => {
         setCurrentQuestionIndex(currentQuestionIndex + 1);
         setTimeLeft(60);
       }
-    }, 5000);
+    }, 7000);
   };
-
 
   const currentQuestion = HourlyQuestions[currentQuestionIndex]?.question;
 
   if (isLoading) {
-    // Render loading screen
     return (
-      <div style={styles.loadingContainer}>
-        <h2 style={styles.loadingText}>
+      <div style={styles.Loadingcontainer}>
+        <h2 style={styles.Loadingtext}>
           Thats Great! Just give me a moment to take notes ✍️
         </h2>
       </div>
@@ -95,32 +94,32 @@ const QuestionScreen:React.FC<QuestionProps> = ({ onFinish }) => {
   return (
     <div style={styles.container}>
       <div style={styles.header}>
-        <h2 style={styles.headerText}>
+        <h2 style={styles.headertext}>
           {currentQuestionIndex + 1}/{totalQuestions}
         </h2>
       </div>
 
-      <div style={styles.questionBox}>
+      <div style={styles.questioncontainer}>
         <h3 style={styles.questionText}>{currentQuestion}</h3>
       </div>
 
-      <div style={styles.timerBox}>
+      <div style={styles.timer}>
         <p style={styles.timerText}>Time Left: {timeLeft}s</p>
       </div>
 
-      <div style={styles.cameraBox}>
+      <div style={styles.cameracontainer}>
         {cameraAllowed && (
           <video ref={videoRef} autoPlay style={styles.videoFeed} />
         )}
       </div>
 
-      <div style={styles.actionsBox}>
+      <div style={styles.buttoncontainer}>
         {currentQuestionIndex < totalQuestions - 1 ? (
-          <button onClick={handleNext} style={styles.saveButton}>
+          <button onClick={handleNext} style={styles.save}>
             Save & Next
           </button>
         ) : (
-          <button onClick={onFinish} style={styles.finishButton}>
+          <button onClick={onFinish} style={styles.finish}>
             Finish Test
           </button>
         )}
@@ -142,14 +141,13 @@ const styles: { [key: string]: React.CSSProperties } = {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    padding: "20px",
-    fontFamily: "Arial, sans-serif",
+    padding: 20,
     backgroundColor: "#161D29",
     color: "#FFFFFF",
     height: "100vh",
     justifyContent: "space-around",
   },
-  loadingContainer: {
+  Loadingcontainer: {
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
@@ -158,97 +156,88 @@ const styles: { [key: string]: React.CSSProperties } = {
     backgroundColor: "#161D29",
     color: "#FFFFFF",
   },
-  loadingText: {
-    fontSize: "24px",
+  Loadingtext: {
+    fontSize: 24,
     fontWeight: "bold",
-    marginBottom: "20px",
+    marginBottom: 20,
     textAlign: "center",
   },
-  loader: {
-    width: "50px",
-    height: "50px",
-    border: "6px solid #FFFFFF",
-    borderTop: "6px solid #00BFFF",
-    borderRadius: "50%",
-    animation: "spin 1s linear infinite",
-  },
   header: {
-    marginBottom: "10px",
+    marginBottom: 10,
   },
-  headerText: {
-    fontSize: "24px",
+  headertext: {
+    fontSize: 24,
     fontWeight: "bold",
     color: "#00BFFF",
   },
-  questionBox: {
+  questioncontainer: {
     width: "90%",
     textAlign: "center",
     backgroundColor: "#1E2A38",
-    padding: "20px",
-    borderRadius: "10px",
+    padding: 20,
+    borderRadius: 10,
   },
   questionText: {
-    fontSize: "20px",
+    fontSize: 20,
     color: "#FFFFFF",
   },
-  timerBox: {
+  timer: {
     padding: "10px 20px",
     backgroundColor: "#1E2A38",
-    borderRadius: "10px",
-    fontSize: "18px",
+    borderRadius: 10,
+    fontSize: 18,
     fontWeight: "bold",
     textAlign: "center",
   },
   timerText: {
     color: "#FFD700",
   },
-  cameraBox: {
+  cameracontainer: {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    gap: "10px",
+    gap:10,
   },
   videoFeed: {
     width: "400px",
     height: "300px",
-    borderRadius: "10px",
+    borderRadius: 10,
     border: "2px solid #00BFFF",
     objectFit: "cover",
     objectPosition: "center",
   },
-  actionsBox: {
+  buttoncontainer: {
     textAlign: "center",
   },
-  saveButton: {
+  save: {
     padding: "12px 30px",
-    fontSize: "16px",
+    fontSize: 16,
     fontWeight: "bold",
     backgroundColor: "#00BFFF",
     border: "none",
-    borderRadius: "10px",
+    borderRadius: 10,
     color: "#FFFFFF",
     cursor: "pointer",
   },
-  finishButton: {
+  finish: {
     padding: "12px 30px",
-    fontSize: "16px",
+    fontSize: 16,
     fontWeight: "bold",
     backgroundColor: "#FF4500",
     border: "none",
-    borderRadius: "10px",
+    borderRadius: 10,
     color: "#FFFFFF",
     cursor: "pointer",
   },
   instructionBox: {
-    fontSize: "14px",
+    fontSize: 14,
     color: "#CCCCCC",
     display: "flex",
     flexDirection: "row",
   },
   icon: {
-    marginLeft: "5px",
-    fontSize: "20px",
-    marginRight: "5px",
+    marginLeft: 5,
+    fontSize: 20,
+    marginRight: 5,
   },
 };
-

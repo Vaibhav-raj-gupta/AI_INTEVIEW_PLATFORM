@@ -7,49 +7,38 @@ import TestCompletion from "./Screens/TestComletion";
 import { FaExclamationTriangle } from "react-icons/fa";
 
 const Home = () => {
-  const [currentScreen, setCurrentScreen] = useState(1); // 1: Instruction, 2: CheckPermission, 3: QuestionScreen, 4: TestCompletion
-  const [modalMessage, setModalMessage] = useState("");
-  const [showModal, setShowModal] = useState(false);
-  const [isDesktop, setIsDesktop] = useState(true); // State to track if the device is desktop
-
+  const [Screen, setScreen] = useState(1);
+  const [message, setmessage] = useState("");
+  const [modal, setmodal] = useState(false);
+  const [isdesktop, setisdesktop] = useState(true);
   // Effect to check the screen width and adjust the app's behavior
   useEffect(() => {
-    const checkScreenSize = () => {
-      setIsDesktop(window.innerWidth > 768); // Set desktop if width is greater than 768px
-    };
-
-    checkScreenSize(); // Initial check
-    window.addEventListener("resize", checkScreenSize); // Listen for resize events
-
-    return () => {
-      window.removeEventListener("resize", checkScreenSize); // Clean up the event listener
-    };
+    const checkScreenSize = () => {setisdesktop(window.innerWidth > 768);};
+    checkScreenSize(); 
   }, []);
 
   const handleStartTest = () => {
     const testCompleted = localStorage.getItem("testCompleted");
 
     if (testCompleted === "true") {
-      if (isDesktop) {
-        setModalMessage("You have already completed this test. Retaking is not allowed at this time. If you believe this is a mistake, please contact the administrator for assistance.");
-        setShowModal(true);
+      if (isdesktop ===true) {
+        setmessage("You have already completed this test. Retaking is not allowed at this time. If you believe this is a mistake, please contact the administrator for assistance.");
+        setmodal(true);
       }
     } else {
-      setCurrentScreen(3); // Navigate to QuestionScreen
+      setScreen(3); // Navigate to QuestionScreen
     }
   };
 
   const handleFinishTest = () => {
-    setCurrentScreen(4); // Navigate to TestCompletion screen
+    setScreen(4); // Navigate to TestCompletion screen
     localStorage.setItem("testCompleted", "true"); // Mark test as completed
   };
 
-  const handleModalClose = () => {
-    setShowModal(false);
-  };
+  const handleModalClose = () => { setmodal(false);};
 
   // Render nothing or a message on mobile devices
-  if (!isDesktop) {
+  if (isdesktop === false) {
     return (
       <div style={styles.mobileMessageContainer}>
         <h2 style={styles.mobileMessage}>This app is only available on desktop devices.Switch to Desktop mode</h2>
@@ -59,22 +48,22 @@ const Home = () => {
 
   return (
     <div>
-      {showModal && (
+      {modal && (
         <div style={styles.modal}>
-          <div style={styles.modalContent}>
-            <div style={styles.warningIconContainer}>
-              <FaExclamationTriangle style={styles.warningIcon} />
-            </div>
-            <h2 style={styles.modalHeader}>Test Already Attempted</h2>
-            <p style={styles.modalMessage}>{modalMessage}</p>
-            <button style={styles.modalCloseButton} onClick={handleModalClose}>Understood</button>
-          </div>
+        <div style={styles.modaldetails}>
+        <div style={styles.warningiconcontainer}>
+        <FaExclamationTriangle style={{fontSize: "80px",color: "orange",}} />
+        </div>
+        <h2 style={styles.modalheader}>Test Already Attempted</h2>
+        <p style={styles.message}>{message}</p>
+        <button style={styles.closebutton} onClick={handleModalClose}>Understood</button>
+        </div>
         </div>
       )}
-      {currentScreen === 1 && <Instruction onNext={() => setCurrentScreen(2)} />}
-      {currentScreen === 2 && <CheckPermission onNext={handleStartTest} />}
-      {currentScreen === 3 && <QuestionScreen onFinish={handleFinishTest} />}
-      {currentScreen === 4 && <TestCompletion />}
+      {Screen === 1 && <Instruction onNext={() => setScreen(2)} />}
+      {Screen === 2 && <CheckPermission onNext={handleStartTest} />}
+      {Screen === 3 && <QuestionScreen onFinish={handleFinishTest} />}
+      {Screen === 4 && <TestCompletion />}
     </div>
   );
 };
@@ -83,61 +72,55 @@ export default Home;
 
 const styles: { [key: string]: React.CSSProperties } = {
   modal: {
-    position: "fixed",
-    top: "0",
-    left: "0",
-    width: "100%",
-    height: "100%",
     backgroundColor: "rgba(0, 0, 0, 0.5)",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
+    position: "fixed",
+    width: "100%",
+    height: "100%"
   },
-  modalContent: {
+  modaldetails: {
     backgroundColor: "#0D1119",
-    padding: "20px",
-    borderRadius: "5px",
     width: "450px",
     height: "400px",
     textAlign: "center",
+    padding: 20,
+    borderRadius: 6
   },
-  warningIconContainer: {
+  warningiconcontainer: {
+    marginBottom: 20,
     display: "flex",
     justifyContent: "center",
-    alignItems: "center",
-    marginBottom: "20px",
+    alignItems: "center"
   },
-  warningIcon: {
-    fontSize: "80px",
-    color: "orange",
+  modalheader: {
+    fontSize: 30,
+    marginBottom: 10,
+    color: "#CDD1DB"
   },
-  modalHeader: {
-    fontSize: "30px",
-    marginBottom: "10px",
-    color: "#CDD1DB",
+  message: {
+    fontSize: 20,
+    marginBottom: 20,
+    color: "#CDD1DB"
   },
-  modalMessage: {
-    fontSize: "20px",
-    marginBottom: "20px",
-    color: "#CDD1DB",
-  },
-  modalCloseButton: {
+  closebutton: {
     backgroundColor: "#007BFF",
     color: "white",
     border: "none",
-    padding: "10px",
-    borderRadius: "5px",
-    cursor: "pointer",
     width: "100%",
+    padding:10,
+    borderRadius: 6,
+    cursor: "pointer"
   },
   mobileMessageContainer: {
     textAlign: "center",
-    padding: "20px",
+    padding: 20,
     backgroundColor: "#0D1119",
-    color: "#CDD1DB",
+    color: "#CDD1DB"
   },
   mobileMessage: {
-    fontSize: "24px",
-    color: "white",
+    fontSize: 24,
+    color: "white"
   },
 };

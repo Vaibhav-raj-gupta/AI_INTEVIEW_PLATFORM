@@ -8,13 +8,13 @@ interface CheckPermissionProps {
   }
 
   const CheckPermission: React.FC<CheckPermissionProps> = ({ onNext }) => {
-  const [cameraAllowed, setCameraAllowed] = useState(false);
-  const [microphoneAllowed, setMicrophoneAllowed] = useState(false);
+  const [camera, setcamera] = useState(false);
+  const [microphone, setmicrophone] = useState(false);
   const [screenShareAllowed, setScreenShareAllowed] = useState(false);
   const [speakerAllowed, setSpeakerAllowed] = useState(false);
   const [soundcheck, setsoundcheck] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [modalMessage, setModalMessage] = useState("");
+  const [message, setmessage] = useState("");
   const [permissionToRequest, setPermissionToRequest] = useState("camera");
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
@@ -23,19 +23,19 @@ interface CheckPermissionProps {
     try {
       const videoStream = await navigator.mediaDevices.getUserMedia({ video: true });
       if (videoStream) {
-        setCameraAllowed(true);
+        setcamera(true);
         setPermissionToRequest("microphone");
       }
     } catch (err) {
       console.error("Camera permission denied", err);
-      setCameraAllowed(false);
-      setModalMessage("Camera permission is required to continue.");
+      setcamera(false);
+      setmessage("Camera permission is required to continue.");
       setShowModal(true);
     }
   };
 
   useEffect(() => {
-    if (cameraAllowed) {
+    if (camera) {
       navigator.mediaDevices.getUserMedia({ video: true })
         .then((stream) => {
           if (videoRef.current) {
@@ -46,20 +46,20 @@ interface CheckPermissionProps {
           console.error("Camera access denied: ", err);
         });
     }
-  }, [cameraAllowed]);
+  }, [camera]);
 
   // Function to request microphone access
   const requestMicrophonePermission = async () => {
     try {
       const audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
       if (audioStream) {
-        setMicrophoneAllowed(true);
+        setmicrophone(true);
         setPermissionToRequest("speaker");
       }
     } catch (err) {
       console.error("Microphone permission denied", err);
-      setMicrophoneAllowed(false);
-      setModalMessage("Microphone permission is required to continue.");
+      setmicrophone(false);
+      setmessage("Microphone permission is required to continue.");
       setShowModal(true);
     }
   };
@@ -76,7 +76,7 @@ interface CheckPermissionProps {
       })
       .catch(() => {
         setSpeakerAllowed(false);
-        setModalMessage("Speaker permission is required to continue.");
+        setmessage("Speaker permission is required to continue.");
         setShowModal(true);
       });
   };
@@ -97,7 +97,7 @@ interface CheckPermissionProps {
     } catch (err) {
       console.log("Screen share permission denied", err);
       setScreenShareAllowed(false);
-      setModalMessage("Screen share permission is required to continue.");
+      setmessage("Screen share permission is required to continue.");
       setShowModal(true);
     }
   };
@@ -114,6 +114,11 @@ interface CheckPermissionProps {
     }
   }, [permissionToRequest]);
 
+  console.log("camera",camera);
+  console.log("microphone",microphone);
+  console.log("speaker",speakerAllowed);
+  console.log("screenshare",screenShareAllowed);
+
   const closeModal = () =>{
     if(permissionToRequest === "screenShare"){
         requestScreenSharePermission();
@@ -123,60 +128,56 @@ interface CheckPermissionProps {
 
   // Function to handle checkbox click and show the relevant message
   const handleCheckboxClick = (permissionType: "camera" | "microphone" | "speaker" | "screenShare") => {
-    if (permissionType === "camera" && !cameraAllowed) {
-      setModalMessage("Camera permission is required to continue.");
+    if (permissionType === "camera" && !camera) {
+      setmessage("Camera permission is required to continue.");
       setShowModal(true);
-    } else if (permissionType === "microphone" && !microphoneAllowed) {
-      setModalMessage("Microphone permission is required to continue.");
+    } else if (permissionType === "microphone" && !microphone) {
+      setmessage("Microphone permission is required to continue.");
       setShowModal(true);
     } else if (permissionType === "speaker" && !speakerAllowed) {
-      setModalMessage("Speaker permission is required to continue.");
+      setmessage("Speaker permission is required to continue.");
       setShowModal(true);
     } else if (permissionType === "screenShare" && !screenShareAllowed) {
-      setModalMessage("Screen share permission is required to continue.");
+      setmessage("Screen share permission is required to continue.");
       setShowModal(true);
     }
   };
 
-  const isAllPermissionsGranted = cameraAllowed && microphoneAllowed && speakerAllowed && screenShareAllowed;
+  const isAllPermissionsGranted = camera && microphone && speakerAllowed && screenShareAllowed;
   const totalQuestions = HourlyQuestions.length;
 
   return (
     <div style={styles.container}>
-      {/* Top Bar */}
-      <div style={styles.topBar}>
+      <div style={styles.TopBar}>
         <div>
-          <text style={styles.companyHeading}>ZekoAi</text>
+          <text style={styles.topheading}>ZekoAi</text>
         </div>
-        <div style={styles.authButton}>Login/SignUp</div>
+        <div style={styles.LoginButton}>Login/SignUp</div>
       </div>
 
-      {/* Main Content */}
-      <div style={styles.mainContent}>
-        {/* Phase 1 */}
-        <div style={styles.phaseOne}>
+      <div style={styles.maincontainer}>
+        <div style={styles.part1}>
           <h2 style={styles.heading}>Trainee Interview</h2>
-          <div style={styles.videoContainer}>
-            {cameraAllowed && <video ref={videoRef} autoPlay muted playsInline style={styles.videoView} />}
+          <div style={styles.cameracontainer}>
+            {camera && <video ref={videoRef} autoPlay muted playsInline style={styles.videoView} />}
           </div>
         </div>
 
-        {/* Phase 2 */}
-        <div style={styles.phaseTwo}>
-          <div style={styles.phaseTwoHeader}>
+        <div style={styles.part2}>
+          <div style={styles.part2Header}>
             <div style={styles.zekoContainer}>
               <FaHome style={styles.icon} /> Zeko
             </div>
-            <div style={styles.timerContainer}>
+            <div style={styles.timer}>
               <FaClock style={styles.icon} /> {totalQuestions} Minutes
             </div>
           </div>
-          <h3 style={styles.subHeading}>Ready To Join?</h3>
-          <h3 style={styles.discriptionText}>
+          <h3 style={styles.subheading}>Ready To Join?</h3>
+          <h3 style={styles.discriptiontext}>
             Please make sure your device is properly configured.
           </h3>
           <div>
-            <div style={styles.checkBoxContainer}>
+            <div style={styles.checkboxcontainer}>
               <div style={styles.checkBox}>
                 <div style={styles.checkBoxLeft}>
                   <FaCamera style={styles.icon} />
@@ -185,7 +186,7 @@ interface CheckPermissionProps {
                 <input
                   type="checkbox"
                   style={styles.checkbox}
-                  checked={cameraAllowed}
+                  checked={camera}
                   onClick={() => handleCheckboxClick("camera")}
                 />
               </div>
@@ -198,7 +199,7 @@ interface CheckPermissionProps {
                 <input
                   type="checkbox"
                   style={styles.checkbox}
-                  checked={microphoneAllowed}
+                  checked={microphone}
                   onClick={() => handleCheckboxClick("microphone")}
                 />
               </div>
@@ -217,9 +218,9 @@ interface CheckPermissionProps {
               </div>
 
              {soundcheck && 
-             <div style={styles.soundcheckContainer}>
-                <span style={styles.soundText}>Are you able to listen to the sound?</span>
-                <button style={styles.soundcheckButton} onClick={handleSoundCheck}>Yes</button>
+             <div style={styles.soundcheckcontainer}>
+                <span style={styles.soundtext}>Are you able to listen to the sound?</span>
+                <button style={styles.soundbutton} onClick={handleSoundCheck}>Yes</button>
               </div>}
 
               <div style={styles.checkBox}>
@@ -238,29 +239,21 @@ interface CheckPermissionProps {
           </div>
           {
             isAllPermissionsGranted ? 
-                <button style={styles.startButton} onClick={onNext}>Start Now</button> :
-                <button style={styles.disableButton} disabled>Start Now</button>
+                <button style={styles.button} onClick={onNext}>Start Now</button> :
+                <button style={styles.disablebutton} disabled>Start Now</button>
             }
           
         </div>
       </div>
 
-      {/* Modal for warning */}
       {showModal && (
         <div style={styles.modal}>
-          <div style={styles.modalContent}>
-            {/* Warning Icon */}
+          <div style={styles.modalcontainer}>
             <div style={styles.warningIconContainer}>
               <FaExclamationTriangle style={styles.warningIcon} />
             </div>
-
-            {/* Header Message */}
             <h2 style={styles.modalHeader}>Permission Required</h2>
-
-            {/* Modal Message */}
-            <p style={styles.modalMessage}>{modalMessage}</p>
-
-            {/* Close Button */}
+            <p style={styles.message}>{message}</p>
             <button style={styles.modalCloseButton} onClick={closeModal}>Close</button>
           </div>
         </div>
@@ -269,16 +262,12 @@ interface CheckPermissionProps {
   );
 };
 
-// CSS in JS
 const styles: { [key: string]: React.CSSProperties } = {
   container: {
-    fontFamily: "Arial, sans-serif",
-    padding: 0,
-    margin: 0,
     backgroundColor: "#161D29",
     minHeight: "100vh",
   },
-  topBar: {
+  TopBar: {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
@@ -290,24 +279,24 @@ const styles: { [key: string]: React.CSSProperties } = {
     fontSize: "24px",
     color: "#007BFF",
   },
-  companyHeading: {
+  topheading: {
     fontSize: "24px",
     color: "#007BFF",
     fontWeight: "bold",
   },
-  authButton: {
+  LoginButton: {
     padding: "5px 15px",
     borderRadius: "20px",
     border: "1px solid #007BFF",
     color: "#007BFF",
     cursor: "pointer",
   },
-  mainContent: {
+  maincontainer: {
     display: "flex",
     gap: "40px",
     padding: "40px",
   },
-  phaseOne: {
+  part1: {
     flex: 1,
     textAlign: "center",
   },
@@ -317,7 +306,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     marginBottom: "20px",
     textAlign: "left",
   },
-  videoContainer: {
+  cameracontainer: {
     width: "100%",
     height: "440px",
     border: "1px solid #ddd",
@@ -325,19 +314,19 @@ const styles: { [key: string]: React.CSSProperties } = {
     justifyContent: "center",
     alignItems: "center",
     borderRadius: "10px",
-    overflow: "hidden", // Ensures content doesn't overflow the container
+    overflow: "hidden",
   },
   videoView: {
     width: "100%",
     height: "100%",
-    objectFit : "cover", // Ensures the video fully covers the container area
-    objectPosition: "center", // Keeps the video centered
+    objectFit : "cover",
+    objectPosition: "center",
   },
-  phaseTwo: {
+  part2: {
     textAlign: "center",
     flex: 1,
   },
-  phaseTwoHeader: {
+  part2Header: {
     display: "flex",
     justifyContent: "flex-end",
     marginBottom: "20px",
@@ -350,7 +339,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     border: "1px solid #007BFF",
     borderRadius: "10px",
   },
-  timerContainer: {
+  timer: {
     display: "flex",
     alignItems: "center",
     gap: "10px",
@@ -359,12 +348,12 @@ const styles: { [key: string]: React.CSSProperties } = {
     borderRadius: "10px",
     marginLeft: "10px",
   },
-  subHeading: {
+  subheading: {
     fontSize: "22px",
     textAlign: "left",
     margin: "0 80px 0px",
   },
-  discriptionText: {
+  discriptiontext: {
     fontSize: "16px",
     marginBottom: "10px",
     textAlign: "left",
@@ -373,7 +362,7 @@ const styles: { [key: string]: React.CSSProperties } = {
   },
 
 
-  checkBoxContainer: {
+  checkboxcontainer: {
     alignItems: "center",
     margin: "0 80px 20px",
   },
@@ -399,7 +388,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     width: "20px",
     height: "20px",
   },
-  startButton: {
+  button: {
     padding: "10px 20px",
     backgroundColor: "#007BFF",
     color: "white",
@@ -410,7 +399,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     marginTop: "20px",
     margin: "0 80px 20px",
   },
-  disableButton: {
+  disablebutton: {
     padding: "10px 20px",
     backgroundColor: "#007BFF",
     color: "white",
@@ -421,7 +410,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     marginTop: "20px",
     margin: "0 80px 20px",
   },
-  soundcheckContainer: {
+  soundcheckcontainer: {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
@@ -431,12 +420,12 @@ const styles: { [key: string]: React.CSSProperties } = {
     marginTop:'-25px',
     backgroundColor: "#161D29",
   },
-  soundText: {
+  soundtext: {
     fontSize: "16px",
     fontWeight: "bold",
     color: "white",
   },
-  soundcheckButton: {
+  soundbutton: {
     padding: "10px 20px",
     backgroundColor: "#007BFF",
     color: "white",
@@ -456,7 +445,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     justifyContent: "center",
     alignItems: "center",
   },
-  modalContent: {
+  modalcontainer: {
     backgroundColor: "#0D1119",
     padding: "20px",
     borderRadius: "5px",
@@ -465,21 +454,21 @@ const styles: { [key: string]: React.CSSProperties } = {
     textAlign: "center",
   },
   warningIconContainer: {
-    display: "flex",  // Make the container a flexbox
-    justifyContent: "center",  // Center horizontally
-    alignItems: "center",  // Center vertically
-    marginBottom: "20px", // Space between icon and header
+    display: "flex", 
+    justifyContent: "center", 
+    alignItems: "center",  
+    marginBottom: "20px", 
   },
   warningIcon: {
     fontSize: "80px",
-    color: "orange", // Orange color for the warning icon
+    color: "orange",
   },
   modalHeader: {
     fontSize: "30px",
     marginBottom: "10px",
     color: "#CDD1DB",
   },
-  modalMessage: {
+  message: {
     fontSize: "20px",
     marginBottom: "20px",
     color: "#CDD1DB",
